@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +14,11 @@ import {
 
 export function ThemeToggle() {
   const { setTheme, resolvedTheme: currentTheme } = useTheme();
+  const [isClient, setIsClient] = useState(false);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -22,7 +27,7 @@ export function ThemeToggle() {
           variant={"outline"}
           className="cursor-pointer  outline-none focus:bg-light-900 data-[state=open]:bg-light-900 dark:focus:bg-dark-200 dark:data-[state=open]:bg-dark-200"
         >
-          {currentTheme === "light" && (
+          {isClient && currentTheme === "light" && (
             <Image
               src={"/icons/sun.svg"}
               width={24}
@@ -33,7 +38,7 @@ export function ThemeToggle() {
               className="active-theme"
             />
           )}
-          {currentTheme === "dark" && (
+          {isClient && currentTheme === "dark" && (
             <Image
               src={"/icons/moon.svg"}
               width={24}
@@ -44,7 +49,6 @@ export function ThemeToggle() {
               className="active-theme"
             />
           )}
-          <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
