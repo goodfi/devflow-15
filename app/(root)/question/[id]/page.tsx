@@ -4,18 +4,19 @@ import React from "react";
 
 import TagCard from "@/components/cards/TagCard";
 import { Preview } from "@/components/editor/Preview";
+import AnswerForm from "@/components/forms/Answerform";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/route";
-import { getQuestion } from "@/lib/actions/question.action";
+import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
-
-import View from "../view";
 
 const QuestionDetails = async ({ params }: RoutParams) => {
   const { id } = await params;
-
+  await incrementViews({ questionId: id });
   const { success, data: question } = await getQuestion({ questionId: id });
+
+  // Increment views directly
 
   if (!success || !question) return redirect("/404");
   console.log(id);
@@ -24,8 +25,7 @@ const QuestionDetails = async ({ params }: RoutParams) => {
 
   return (
     <>
-      <View questionId={id} />
-      <div className="flex-start w-full flex-col">
+      <div className="flex-start  flex-col">
         <div className="flex w-full flex-col-reverse justify-between">
           <div className="flex items-center justify-start gap-1">
             <UserAvatar
@@ -87,6 +87,10 @@ const QuestionDetails = async ({ params }: RoutParams) => {
           />
         ))}
       </div>
+
+      <section className="py-5">
+        <AnswerForm questionId={question._id} />
+      </section>
     </>
   );
 };

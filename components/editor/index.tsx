@@ -27,6 +27,7 @@ import {
   codeBlockPlugin,
   codeMirrorPlugin,
   diffSourcePlugin,
+  BlockTypeSelect,
 } from "@mdxeditor/editor";
 import { basicDark } from "cm6-theme-basic-dark";
 import { useTheme } from "next-themes";
@@ -94,11 +95,12 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
                 },
                 {
                   fallback: () => (
-                    <>
+                    <div className="flex flex-wrap">
                       <UndoRedo />
                       <Separator />
 
                       <BoldItalicUnderlineToggles />
+                      <BlockTypeSelect />
                       <Separator />
 
                       <ListsToggle />
@@ -112,7 +114,7 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
                       <InsertThematicBreak />
 
                       <InsertCodeBlock />
-                    </>
+                    </div>
                   ),
                 },
               ]}

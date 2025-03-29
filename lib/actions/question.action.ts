@@ -1,9 +1,7 @@
 "use server";
 
 import mongoose, { FilterQuery } from "mongoose";
-import { revalidatePath } from "next/cache";
 
-import ROUTES from "@/constants/route";
 import Question, { IQuestionDoc } from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
 import Tag, { ITagDoc } from "@/database/tags.model";
@@ -310,8 +308,6 @@ export async function incrementViews(
     question.views += 1;
 
     await question.save();
-
-    revalidatePath(ROUTES.QUESTION(questionId));
 
     return {
       success: true,
