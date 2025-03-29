@@ -39,7 +39,6 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
   });
 
   const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-    console.log(values);
     startAnsweringTransition(async () => {
       const result = await createAnswer({
         questionId,
