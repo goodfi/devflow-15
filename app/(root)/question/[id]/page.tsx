@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 
 import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
@@ -12,6 +12,7 @@ import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/route";
 import { getAnswers } from "@/lib/actions/answer.action";
+import { hasSavedQuestion } from "@/lib/actions/collection.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
@@ -39,6 +40,9 @@ const QuestionDetails = async ({ params }: RoutParams) => {
     targetId: question._id,
     targetType: "question",
   });
+  const hasSavedQuestionPromise = hasSavedQuestion({
+    questionId: question._id,
+  });
 
   const { author, createdAt, answers, views, tags, content, title } = question;
 
@@ -61,14 +65,22 @@ const QuestionDetails = async ({ params }: RoutParams) => {
           </div>
 
           <div className="flex justify-end gap-2">
-            <Votes
-              targetType="question"
-              upvotes={question.upvotes}
-              downvotes={question.downvotes}
-              targetId={question._id}
-              hasVotedPromise={hasVotedPromise}
-            />
-            <SaveQuestion questionId={id} />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Votes
+                targetType="question"
+                upvotes={question.upvotes}
+                downvotes={question.downvotes}
+                targetId={question._id}
+                hasVotedPromise={hasVotedPromise}
+              />
+            </Suspense>
+
+            <Suspense fallback={<div>Loading...</div>}>
+              <SaveQuestion
+                questionId={question._id}
+                hasSavedQuestionPromise={hasSavedQuestionPromise}
+              />
+            </Suspense>
           </div>
         </div>
 
