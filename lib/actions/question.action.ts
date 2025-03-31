@@ -254,7 +254,7 @@ export async function getQuestions(
       break;
 
     case "popular":
-      sortCriteria = { upvotes: -1 };
+      sortCriteria = { views: -1 };
       break;
 
     default:
