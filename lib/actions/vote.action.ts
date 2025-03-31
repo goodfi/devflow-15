@@ -44,7 +44,6 @@ export async function updateVoteCount(
         new Error("Failed to update vote count")
       ) as unknown as ErrorResponse;
 
-    revalidatePath(ROUTES.QUESTION(targetId));
     return { success: true };
   } catch (error) {
     return handleError(error) as unknown as ErrorResponse;
@@ -68,7 +67,7 @@ export async function createVote(
   const userId = validationResult.session?.user?.id;
 
   if (!userId)
-    handleError(new Error("Unauthorized")) as unknown as ErrorResponse;
+    return handleError(new Error("Unauthorized")) as unknown as ErrorResponse;
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -94,6 +93,10 @@ export async function createVote(
           existingVote._id,
           { voteType },
           { new: true, session }
+        );
+        await updateVoteCount(
+          { targetId, targetType, voteType: existingVote.voteType, change: -1 },
+          session
         );
         await updateVoteCount(
           { targetId, targetType, voteType, change: 1 },
@@ -123,6 +126,7 @@ export async function createVote(
 
     await session.commitTransaction();
     session.endSession();
+
     revalidatePath(ROUTES.QUESTION(targetId));
 
     return { success: true };
