@@ -12,14 +12,15 @@ import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/route";
 import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
+import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 
 const QuestionDetails = async ({ params }: RoutParams) => {
   const { id } = await params;
-  await incrementViews({ questionId: id });
+
   const { success, data: question } = await getQuestion({ questionId: id });
 
-  // Increment views directly
+  await incrementViews({ questionId: id });
 
   if (!success || !question) return redirect("/404");
 
@@ -32,6 +33,10 @@ const QuestionDetails = async ({ params }: RoutParams) => {
     page: 1,
     pageSize: 10,
     filter: "latest",
+  });
+  const hasVotedPromise = hasVoted({
+    targetId: question._id,
+    targetType: "question",
   });
 
   const { author, createdAt, answers, views, tags, content, title } = question;
@@ -56,10 +61,11 @@ const QuestionDetails = async ({ params }: RoutParams) => {
 
           <div className="flex justify-end">
             <Votes
+              targetType="question"
               upvotes={question.upvotes}
-              hasupVoted={true}
               downvotes={question.downvotes}
-              hasdownVoted={false}
+              targetId={question._id}
+              hasVotedPromise={hasVotedPromise}
             />
           </div>
         </div>
