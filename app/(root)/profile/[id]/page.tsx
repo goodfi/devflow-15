@@ -167,7 +167,7 @@ const Profile = async ({ params, searchParams }: RoutParams) => {
             />
             <Pagination page={page} isNext={hasMoreQuestions} />
           </TabsContent>
-          <TabsContent value="answers" className="flex w-full flex-col gap-6">
+          <TabsContent value="answers " className="flex w-full flex-col gap-6">
             <DataRenderer
               data={answers}
               empty={EMPTY_ANSWERS}
