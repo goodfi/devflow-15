@@ -1,9 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    after: true,
-  },
   serverExternalPackages: ["pino", "pino-pretty"],
   eslint: {
     ignoreDuringBuilds: true,
