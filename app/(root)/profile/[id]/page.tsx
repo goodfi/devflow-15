@@ -136,6 +136,7 @@ const Profile = async ({ params, searchParams }: RoutParams) => {
           SILVER: 0,
           BRONZE: 0,
         }}
+        reputationPoints={user.reputation || 0}
       />
 
       <section className="mt-10 flex gap-10">

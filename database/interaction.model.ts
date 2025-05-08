@@ -22,3 +22,14 @@ const Interaction =
   models?.Interaction || model<IInteraction>("Interaction", InteractionSchema);
 
 export default Interaction;
+
+export const InteractionActionEnums = [
+  "view",
+  "upvote",
+  "downvote",
+  "bookmark",
+  "post",
+  "edit",
+  "delete",
+  "search",
+] as const;
